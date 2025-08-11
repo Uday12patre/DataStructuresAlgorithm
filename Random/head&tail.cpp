@@ -37,7 +37,7 @@ public:
         return;
     }
 
-    void display()
+    void display(Node *)
     {
         if (!head)
         {

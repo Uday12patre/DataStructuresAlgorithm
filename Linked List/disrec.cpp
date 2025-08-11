@@ -15,22 +15,34 @@ private:
 public:
     SLL() : head(nullptr) {} // Constructor initialization
 
-    void display()
+    void display() // Wraping Function
     {
-        if (!head)
-        {
-            cout << "List is Empty!\n";
-            return;
-        }
+        disrec(head);
+    }
 
-        Node *p = head;
-        while (p)
-        {
-            cout << p->data << "\n";
-            p = p->next;
-        }
-        cout << endl;
-        return;
+    void disrec(Node *P)
+    {
+        if (!P)
+            return;
+        Node *p = P;
+
+        cout << p->data << "\t";
+        disrec(p->next);
+    }
+
+    void displayRev() // Wraping Function
+    {
+        disrecRev(head);
+    }
+
+    void disrecRev(Node *P)
+    {
+        if (!P)
+            return;
+        Node *p = P;
+
+        disrecRev(p->next);
+        cout << p->data << "\t";
     }
 
     void append(int key)
@@ -58,40 +70,6 @@ public:
         p->next = nn;
         return;
     }
-
-    void remove(int key)
-    {
-        if (!head) // if list is MT.
-        {
-            cout << "List Is Empty.\n";
-            return;
-        }
-
-        Node *p1 = head;
-        Node *p2 = nullptr;
-
-        if (p1->data == key) // if first node itself is a key!
-        {
-            head = p1->next;
-            delete p1;
-            return;
-        }
-
-        while (p1 && p1->data != key) // General case // also fo searching / Traversing the key
-        {
-            p2 = p1;
-            p1 = p1->next;
-        }
-
-        if (!p1) // if Key Not Found.
-        {
-            cout << "Key Not Found.\n";
-            return;
-        }
-
-        p2->next = p1->next;
-        delete p2;
-    }
 };
 
 int main()
@@ -109,12 +87,9 @@ int main()
     L.append(100);
     L.append(110);
     L.append(120);
+    cout << "Linked List:\n";
     L.display();
-
-    L.remove(100);
-    L.remove(10);
-    L.remove(120);
-
-    L.display();
+    cout << "\nReverse Linked List:\n";
+    L.displayRev();
     return 0;
 }
