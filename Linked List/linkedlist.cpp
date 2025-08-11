@@ -55,7 +55,7 @@ public:
         {
             p = p->next;
         }
-        p->next = nn;
+        p->next = nn;   
         return;
     }
 };
