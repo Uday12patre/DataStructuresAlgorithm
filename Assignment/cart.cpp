@@ -7,6 +7,7 @@ struct Item
     string name;
     int quantity;
     double price;
+    string type;
 };
 
 struct Node
@@ -20,104 +21,121 @@ struct Node
 class ShoppingCart
 {
 private:
-    Node *head;
+    Node *head, *tail;
 
 public:
-    ShoppingCart() : head(nullptr) {}
+    ShoppingCart() : head(nullptr), tail(nullptr) {}
 
-    void addItem(string name, int quantity, double price)
+    void addItem(string name, int quantity, double price, string type)
     {
-        Item newItem = {name, quantity, price};
+        Item newItem = {name, quantity, price, type};
         Node *newNode = new Node(newItem);
 
-        if (head == nullptr)
+        if (head == nullptr) // if(head)
         {
             head = newNode;
+            tail = newNode;
         }
 
         else
         {
-            Node *current = head;
-            while (current->next != nullptr)
-            {
-                current = current->next;
-            }
-            current->next = newNode;
+            tail->next = newNode;
+            tail = newNode;
         }
-        cout << "Added " << quantity << " x " << name << " to the cart.\n";
+        return;
+
+        /* Node* current = head;
+        while (current -> next != nullptr) // if(!current->next)
+        {
+            current = current -> next;
+        }
+        current -> next = newNode; */
+
+        cout << "Added " << quantity << " x " << name << " of type " << type << " to the cart.\n";
     }
-
-    /*  void removeItem(const std::string& name) {
-        if (head == nullptr) {
-            std::cout << "Cart is empty. Nothing to remove." << std::endl;
-            return;
-        }
-
-        if (head->data.name == name) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-            std::cout << "Removed " << name << " from the cart." << std::endl;
-            return;
-        }
-
-        Node* current = head;
-        while (current->next != nullptr && current->next->data.name != name) {
-            current = current->next;
-        }
-
-        if (current->next != nullptr) {
-            Node* temp = current->next;
-            current->next = temp->next;
-            delete temp;
-            std::cout << "Removed " << name << " from the cart." << std::endl;
-        } else {
-            std::cout << "Item '" << name << "' not found in the cart." << std::endl;
-        }
-    } */
 
     void displayitem(string itemname)
     {
+        int flag = 0;
         Node *current = head;
         while (current)
         {
             if (current->data.name == itemname)
             {
-                cout << current->data.name << " x " << current->data.quantity << " @ " << current->data.price << " each\n";
+
+                flag = 1;
+                cout << "Type: " << current->data.type << "\t" << current->data.name << " x " << current->data.quantity << " @ " << current->data.price << " each\n";
                 break;
             }
             current = current->next;
         }
 
-        if (!current)
+        if (!flag)
         {
             cout << itemname << " not found.\n";
         }
         return;
     }
 
-    void updateItem(string itemname, int num)
+    void displaybyType(string Type)
     {
-        Node *current = head;
+        int flag = 0;
 
-        if (!current)
+        if (head == nullptr)
         {
-            cout << itemname << " not found.\n";
+            cout << "Your shopping cart is for this type is empty.\n";
             return;
         }
+        cout << "\n---Your Shopping Cart ---\n";
 
+        Node *current = head;
+
+        while (current != nullptr)
+        {
+            if (current->data.type == Type)
+            {
+                flag = 1;
+                cout << "Type: " << current->data.type
+                     << " Item: " << current->data.name
+                     << ", Quantity: " << current->data.quantity
+                     << ", Price: $" << current->data.price
+                     << " each\n";
+            }
+            current = current->next;
+        }
+
+        cout << "--------------------\n";
+        if (!flag)
+        {
+            cout << Type << " Not Found.";
+        }
+        return;
+    }
+
+    void updateItem(string itemname, int num)
+    {
+        int flag = 0;
+        Node *current = head;
         while (current)
         {
             if (current->data.name == itemname)
             {
+                flag = 1;
                 current->data.quantity = num;
-                cout << "Quantity Updated! \n";
+                cout << " Quantity Updated! \n";
                 cout << current->data.name << " x " << current->data.quantity << " @ " << current->data.price << " each\n";
             }
 
             current = current->next;
         }
+
+        if (!flag)
+        {
+            cout << itemname << " not found.\n";
+        }
+        return;
     }
+
     void displayCartItems()
     {
         if (head == nullptr)
@@ -129,7 +147,8 @@ public:
         Node *current = head;
         while (current != nullptr)
         {
-            cout << "Item: " << current->data.name
+            cout << "Type: " << current->data.type
+                 << " Item: " << current->data.name
                  << ", Quantity: " << current->data.quantity
                  << ", Price: $" << current->data.price
                  << " each\n";
@@ -150,6 +169,61 @@ public:
         }
         return totalCost;
     }
+
+    void remove(string key)
+    {
+        if (!head) // if list is MT.
+        {
+            cout << "List Is Empty.\n";
+            return;
+        }
+
+        Node *current = head;
+        Node *p2 = nullptr;
+
+        if (current->data.name == key) // if first node itself is a key!
+        {
+            head = current->next;
+            delete current;
+            return;
+        }
+
+        while (current && current->data.name != key) // General case // also fo searching / Traversing the key
+        {
+            p2 = current;
+            current = current->next;
+        }
+
+        if (!current) // if Key Not Found.
+        {
+            cout << "Key Not Found.\n";
+            return;
+        }
+
+        p2->next = current->next;
+        delete current;
+    }
+
+    void EmptyCart()
+    {
+        if (!head)
+        {
+            cout << "List is Empty.";
+            return;
+        }
+
+        Node *current = head;
+        Node *p2 = nullptr;
+
+        while (current)
+        {
+            p2 = current;
+            current = current->next;
+            delete p2;
+        }
+
+        head = nullptr;
+    }
 };
 
 int main()
@@ -160,7 +234,7 @@ int main()
     int quantity;
     double price;
     double total;
-    string itemname;
+    string itemname, ty;
     int num;
 
     do
@@ -170,9 +244,11 @@ int main()
         cout << "2. Remove Item\n";
         cout << "3. Display Item details\n";
         cout << "4. Display Cart Items\n";
-        cout << "5. Update item quantity\n";
-        cout << "6. Calculate Total Cost\n";
-        cout << "7. Exit\n";
+        cout << "5. Display by Type\n";
+        cout << "6. Update item quantity\n";
+        cout << "7. Calculate Total Cost\n";
+        cout << "8. Empty Cart\n";
+        cout << "9. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -181,18 +257,19 @@ int main()
         case 1:
             cout << "Enter item name: ";
             cin >> name;
+            cout << "Enter item type: ";
+            cin >> ty;
             cout << "Enter quantity: ";
             cin >> quantity;
             cout << "Enter price: ";
             cin >> price;
 
-            mycart.addItem(name, quantity, price);
+            mycart.addItem(name, quantity, price, ty);
             break;
         case 2:
-            cout << "Funtion yet to write! Try next function!\n";
-            /* std::cout << "Enter item name to remove: ";
-                std::getline(std::cin, name);
-                myCart.removeItem(name); */
+            cout << "Enter item name to remove: ";
+            cin >> name;
+            mycart.remove(name);
             break;
         case 3:
             cout << "Enter name of item: ";
@@ -204,23 +281,31 @@ int main()
             mycart.displayCartItems();
             break;
         case 5:
+            cout << "Enter type of item: ";
+            cin >> ty;
+            mycart.displaybyType(ty);
+            break;
+        case 6:
             cout << "Enter name of item: ";
             cin >> itemname;
             cout << "Enter updated quantity of item: ";
             cin >> num;
             mycart.updateItem(itemname, num);
             break;
-        case 6:
+        case 7:
             total = mycart.calculateTotalCost();
             cout << "Total cost of all items: $" << total << "\n";
             break;
-        case 7:
+        case 8:
+            mycart.EmptyCart();
+            break;
+        case 9:
             cout << "Exiting program. Goodbye!\n";
             break;
         default:
             cout << "Invalid choice. Please try again.\n";
             break;
         }
-    } while (choice != 7);
+    } while (choice != 9);
     return 0;
 }
