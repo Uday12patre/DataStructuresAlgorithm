@@ -90,7 +90,7 @@ public:
         }
 
         p2->next = p1->next;
-        delete p2;
+        delete p2;  
     }
 };
 
