@@ -80,15 +80,6 @@ class PriorityQueue
        	 
         	return;
     	}
-   	 
-    	void deQueue()
-    	{
-        	int K = peek();
-        	arr[0] = arr[rear--];
-        	Adjust();
-        	cout  << K;
-        	return;
-    	}
 };
 
 int main()
@@ -103,10 +94,6 @@ int main()
     	Q.Display();
     	cout << endl;
 	}
-    
-	Q.deQueue();
-	cout << endl;
-	Q.Display();
 	return 0;
 }
 
