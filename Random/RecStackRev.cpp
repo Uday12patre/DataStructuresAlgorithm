@@ -69,22 +69,31 @@ public:
 
         cout << "\n";
     }
+
+    void insertAtBottom(int item)
+    {
+        if (IsEmpty())
+        {
+            push(item);
+        }
+        else
+        {
+            int temp = pop();
+            insertAtBottom(item);
+            push(temp);
+        }
+    }
+
+    void reverse()
+    {
+        if (!IsEmpty())
+        {
+            int temp = pop();
+            reverse();
+            insertAtBottom(temp);
+        }
+    }
 };
-
-void reverse_stack(Stack s1)
-{
-    Stack s2;
-    while (!s1.IsEmpty())
-    {
-        s2.push(s1.pop());
-    }
-
-    while (!s2.IsEmpty())
-    {
-        cout << s2.pop() << " ";
-    }
-    return;
-}
 
 int main()
 {
@@ -102,6 +111,7 @@ int main()
     s.display();
 
     cout << "After Reversing: ";
-    reverse_stack(s);
+    s.reverse();
+    s.display();
     return 0;
 }

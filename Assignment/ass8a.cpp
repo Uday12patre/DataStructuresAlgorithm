@@ -1,3 +1,6 @@
+// Assignment 8 b)Convert Recursive code to a non-recursive code using Stack
+// a) Factorial
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -53,55 +56,30 @@ public:
         return (top >= 99);
     }
 
-    void display()
+    int input()
     {
-        if (top < 0)
-        {
-            cout << "Stack is Empty!\n";
-            return;
-        }
+        int n;
+        cout << "Enter No. to find Fatorial: ";
+        cin >> n;
+        return n;
+    }
 
-        cout << "Stack (Top to Bottom): ";
-        for (int i = top; i >= 0; i--)
+    int fact(int n)
+    {
+        int pro = 1;
+        for (int i = n; i >= 1; i--)
         {
-            cout << arr[i] << " ";
+            push(i);
+            pro = pop() * pro;
         }
-
-        cout << "\n";
+        return pro;
     }
 };
-
-void reverse_stack(Stack s1)
-{
-    Stack s2;
-    while (!s1.IsEmpty())
-    {
-        s2.push(s1.pop());
-    }
-
-    while (!s2.IsEmpty())
-    {
-        cout << s2.pop() << " ";
-    }
-    return;
-}
 
 int main()
 {
     Stack s;
-    s.push(10);
-    s.push(20);
-    s.push(30);
-    s.push(40);
-    s.push(50);
-    s.push(60);
-    s.push(70);
-    s.push(80);
-    s.push(90);
-
-    s.display();
-
-    cout << "After Reversing: ";
-    reverse_stack(s);
+    int n = s.input();
+    cout << "Fatorial of " << n << " is " << s.fact(n) << endl;
     return 0;
 }
