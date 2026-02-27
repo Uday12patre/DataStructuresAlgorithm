@@ -1,0 +1,4 @@
+[i] polynomial addition and multiplication
+[ii] infix to postfix evaluation
+[iii] stack using queue and vice a versa
+[iv] Reverse of SLL using three pointers
